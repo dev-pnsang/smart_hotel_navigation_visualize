@@ -233,7 +233,6 @@ function Playback() {
     apiRef.current = api;
   });
   const progressRef = useRef(0);
-  const coverOn = useRef(false);
   const switched = useRef(false);
   const latched = useRef(false);
 
@@ -243,7 +242,6 @@ function Playback() {
     progressRef.current = arrived ? 1 : 0;
     navRuntime.stepProgress = progressRef.current;
     navRuntime.doorOpen = 0;
-    coverOn.current = false;
     switched.current = false;
     latched.current = false;
     const step = current.steps[current.state.navStepIndex];
@@ -274,18 +272,10 @@ function Playback() {
 
       if (step.kind === "vertical") {
         navRuntime.doorOpen = doorAmount(progressRef.current);
-        if (progressRef.current > 0.2 && !coverOn.current) {
-          coverOn.current = true;
-          current.setCover(step.toFloorId);
-        }
         if (progressRef.current > 0.5 && !switched.current) {
           switched.current = true;
           navRuntime.snap = true;
           current.focusFloor(step.toFloorId);
-        }
-        if (progressRef.current > 0.74 && coverOn.current) {
-          coverOn.current = false;
-          current.setCover(null);
         }
       } else {
         navRuntime.doorOpen = 0;

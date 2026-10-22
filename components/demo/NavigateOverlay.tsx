@@ -69,15 +69,6 @@ export function NavigateOverlay() {
 
   return (
     <div className="pointer-events-none absolute inset-0">
-      <div
-        className={`absolute inset-0 z-20 grid place-items-center bg-ivory transition-opacity duration-500 ${state.coverFloorId ? "pointer-events-auto opacity-100" : "opacity-0"}`}
-      >
-        <div className="px-6 text-center">
-          <p className="text-xs tracking-[0.18em] text-muted uppercase">Thang máy · mô phỏng</p>
-          <p className="mt-3 font-display text-5xl">Đang đến {getFloor(state.coverFloorId ?? "")?.name ?? "tầng kế"}</p>
-        </div>
-      </div>
-
       <header className="pointer-events-auto absolute top-3 right-20 left-3 bg-paper/95 p-4 md:right-auto md:max-w-md">
         <div className="flex items-start justify-between gap-3">
           <div>

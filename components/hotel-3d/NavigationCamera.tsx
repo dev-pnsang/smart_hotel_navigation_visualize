@@ -13,10 +13,12 @@ import { navRuntime } from "@/lib/nav-runtime";
 export function NavigationCamera() {
   const { camera } = useThree();
   const controls = useRef<OrbitControlsImpl>(null);
-  const { state } = useDemo();
+  const { state, steps } = useDemo();
   const stateRef = useRef(state);
+  const stepsRef = useRef(steps);
   useEffect(() => {
     stateRef.current = state;
+    stepsRef.current = steps;
   });
   const desired = useRef(new Vector3(48, 36, 48));
   const lookTarget = useRef(new Vector3(0, 14, 0));
@@ -43,24 +45,31 @@ export function NavigationCamera() {
       signature.current = sig;
       blending.current = true;
       if (controls.current) controls.current.enabled = false;
+      if (current.cameraMode === "guided") navRuntime.snap = true;
     }
 
     if (current.cameraMode === "guided") {
-      const forwardX = navRuntime.lookX - navRuntime.x;
-      const forwardZ = navRuntime.lookZ - navRuntime.z;
-      const span = Math.hypot(forwardX, forwardZ);
-      const dirX = span > 0.2 ? forwardX / span : 0;
-      const dirZ = span > 0.2 ? forwardZ / span : -1;
-      const lobby = current.selectedFloorId === "floor-1";
-      const side = lobby ? 6.8 : 7.6;
-      const back = lobby ? 3.8 : 4.4;
-      const height = lobby ? 5.8 : 7.2;
-      desired.current.set(
-        navRuntime.x + dirZ * side - dirX * back,
-        navRuntime.y + height,
-        navRuntime.z - dirX * side - dirZ * back,
-      );
-      lookTarget.current.set(navRuntime.lookX, navRuntime.lookY + 0.85, navRuntime.lookZ);
+      const riding = stepsRef.current[current.navStepIndex]?.kind === "vertical";
+      if (riding) {
+        desired.current.set(16, floorY + 15, 18);
+        lookTarget.current.set(0, floorY + 0.5, 0);
+      } else {
+        const forwardX = navRuntime.lookX - navRuntime.x;
+        const forwardZ = navRuntime.lookZ - navRuntime.z;
+        const span = Math.hypot(forwardX, forwardZ);
+        const dirX = span > 0.2 ? forwardX / span : 0;
+        const dirZ = span > 0.2 ? forwardZ / span : -1;
+        const lobby = current.selectedFloorId === "floor-1";
+        const side = lobby ? 6.8 : 7.6;
+        const back = lobby ? 3.8 : 4.4;
+        const height = lobby ? 5.8 : 7.2;
+        desired.current.set(
+          navRuntime.x + dirZ * side - dirX * back,
+          navRuntime.y + height,
+          navRuntime.z - dirX * side - dirZ * back,
+        );
+        lookTarget.current.set(navRuntime.lookX, navRuntime.lookY + 0.85, navRuntime.lookZ);
+      }
       blending.current = true;
     } else if (current.cameraMode === "floor") {
       if (current.floorView === "top") {
