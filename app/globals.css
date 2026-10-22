@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --ivory: #f3eee6;
+  --paper: #fbf8f3;
+  --ink: #1c1915;
+  --slate: #403a34;
+  --muted: #746b60;
+  --line: rgba(28, 25, 21, 0.14);
+  --gold: #a18455;
+  --teal: #2c5c57;
+  --success: #2c6b50;
+  --amber: #9a6a2a;
+  --danger: #8d3d3d;
+  --background: var(--ivory);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-ivory: var(--ivory);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-slate: var(--slate);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-gold: var(--gold);
+  --color-teal: var(--teal);
+  --color-success: var(--success);
+  --color-amber: var(--amber);
+  --color-danger: var(--danger);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-cormorant), "Times New Roman", serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+.scene-stage {
+  background:
+    radial-gradient(900px 520px at 78% 0%, #f8f4ec 0%, transparent 58%),
+    linear-gradient(180deg, #f6f1e8 0%, #e5dcd0 100%);
+}
+
+.scene-stage canvas {
+  touch-action: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
